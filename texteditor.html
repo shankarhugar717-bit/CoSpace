@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            #editor {
+                min-height: 400px;
+                padding: 20px;
+                border: 1px solid #ccc;
+                outline: none;
+            }
+            #resetBoard {
+                background-color: #e74c3c;
+                color: white;
+                padding: 8px 16px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            
+            .canvas {
+                margin-top: 30px;
+            }
+
+            .whiteboard-toolbar {
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 12px;
+                margin-bottom: 15px;
+            }
+
+            .whiteboard-toolbar button {
+                padding: 8px 14px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                background: #333;
+                color: white;
+            }
+
+            .whiteboard-toolbar button:hover {
+                background: #555;
+            }
+
+            #board {
+                display: block;
+                max-width: 100%;
+                height: auto;
+                border: 2px solid #333;
+                background: white;
+                cursor: crosshair;
+                touch-action: none;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="canvas">
+        
+            <h2>CollabSpace Whiteboard</h2>
+        
+            <div class="whiteboard-toolbar">
+            
+                <label for="brushSize">Brush Size:</label>
+                <input type="range" id="brushSize"
+                       min="1" max="30" value="3"
+                >
+                <span id="sizeValue">3</span>
+                <label for="penColor">Pen Colour:</label>
+                <input type="color" id="penColor" value="#000000">
+                <button type="button" id="eraserTool">Eraser: OFF</button>
+                <button type="button" id="undoButton">Undo</button>
+                <button type="button" id="resetBoard">Clear Board</button>
+
+                <label for="shapeTool">Shapes:</label>
+
+                <select id="shapeTool">
+                    <option value="pen">Freehand</option>
+                    <option value="square">Square</option>
+                    <option value="rectangle">Rectangle</option>
+                    <option value="line">Line</option>
+                    <option value="curve">Curve</option>
+                    <option value="circle">Circle</option>
+                    <option value="ellipse">Ellipse</option>
+                    <option value="star">Star</option>
+                </select>
+            </div>
+        
+            <canvas id="board" width="800" height="500"></canvas>
+        
+        </div>
+        <script src="project.js"></script>
+    </body>
+</html>
