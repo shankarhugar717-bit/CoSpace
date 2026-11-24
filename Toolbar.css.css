@@ -1,3 +1,6 @@
+body{
+    margin:0;
+}
 .material-symbols-outlined {
     font-size: 24px;
 }
@@ -9,6 +12,7 @@
     border-color:black;
     border-style: solid;
     border-width: 2px;
+    justify-content: center;
 }
 
 
@@ -45,4 +49,15 @@
 #shapes span{
     grid-column:1/5;
     text-align: center;
+}
+
+#canvas-container {
+    display: flex;
+    justify-content: center;
+}
+
+#page{
+    display:block;
+    border:1px solid black;
+    margin-top:10px auto;
 }

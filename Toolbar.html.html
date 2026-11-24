@@ -3,7 +3,7 @@
 <head>
     <title>Canvas</title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
-        <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="Toolbar.css.css" />
 </head>
     <body>
 <div id="main">
@@ -30,7 +30,7 @@
         <span > Tools </span>
     </div>
     <div id="shapes">
-        <div> <button> <span class="material-symbols-outlined">rectangle</span></button>
+        <div> <button id="rect-btn"> <span class="material-symbols-outlined">rectangle</span></button>
         </div>
         <div> <button> <span class="material-symbols-outlined">change_history</span> </button>
         </div>
@@ -57,5 +57,7 @@
         <span> Shapes </span>
     </div>
 </div>
+    <div id="canvas-container"> <canvas id="page"></canvas> </div>
+ <script src="Toolbar.js"></script>
 </body>
 </html>
