@@ -14,8 +14,35 @@ btnerase=document.getElementById("erase-btn");
 btnheart=document.getElementById("heart-btn");
 btnrange=document.getElementById("h-range");
 btntri=document.getElementById("tri-btn");
+btnselect=document.getElementById("select-btn");
 let shapes=[];
 let selectedobj=-1;
+btnrange.addEventListener("input",function(){
+    if(selectedobj!=-1){
+        let shape=shapes[selectedobj];
+        if(shape.type=="heart"){
+            shape.size=Number(btnrange.value);
+            redraw();
+        }
+        else if(shape.type=="rectangle"){
+            let ratio=shape.height/shape.width;
+            shape.width=Number(btnrange.value);
+            shape.height=shape.width*ratio;
+            redraw();
+        }
+        else if(shape.type=="circle"){
+            shape.radius=btnrange.value
+            redraw();
+        }
+        else if(shape.type=="triangle"){
+            let width=shape.x2-shape.x1;
+            let  height=shape.y2-shape.y1;
+            shape.x2=shape.x1+width+Number(btnrange.value);
+            shape.y2=shape.y1+width+Number(btnrange.value);
+            redraw();
+        }
+    }
+});
 btncircle.addEventListener("click",function(){
     if(selectedshape=="circle"){
             selectedshape="";
@@ -63,12 +90,20 @@ btntri.addEventListener("click",function(){
     else{
         selectedshape="triangle";
     }
-})
+});
+btnselect.addEventListener("click",function(){
+    if(selectedshape=="select"){
+        selectedshape="";
+    }
+    else{
+        selectedshape="select";
+    }
+});
 let isdrawing=false;
 let startx,starty;
 
 canvas.addEventListener('mousedown',function(event){
-    if(selectedshape=="rectangle" || selectedshape=="circle"||selectedshape=="line"||selectedshape=="erase"||selectedshape=="triangle"){
+    if(selectedshape=="rectangle" || selectedshape=="circle"||selectedshape=="line"||selectedshape=="erase"||selectedshape=="triangle"||selectedshape=="select"){
         let rect=canvas.getBoundingClientRect();
         startx=(event.clientX-rect.left)*(canvas.width/rect.width);
         starty=(event.clientY-rect.top)*(canvas.height/rect.height);
@@ -130,9 +165,6 @@ canvas.addEventListener('mousemove',function(event){
     }
     else if(selectedshape=="erase"){
         ctx.clearRect(currx-10,curry-10,20,20);
-        ctx.strokestyle="black";
-        ctx.lineWidth=2;
-        ctx.stroke;
     }
     else if(selectedshape=="triangle"){
         ctx2.clearRect(0,0,canvas2.width,canvas2.height);
@@ -219,6 +251,86 @@ canvas.addEventListener('mouseup',function(event){
             ctx.closePath();
             ctx.stroke();
         }
+        else if(selectedshape=="select"){
+            selectedobj=-1;
+        for(let i=0;i<shapes.length;i++){
+            let shape=shapes[i];
+            if(shape.type=="rectangle"){
+                if(startx>=Math.min(shape.x,shape.x+shape.width)&&startx<=Math.max(shape.x,shape.x+shape.width)&&starty>=Math.min(shape.y,shape.y+shape.height)&&starty<=Math.max(shape.y,shape.y+shape.height)){
+                selectedobj=i;
+                }
+            }   
+            else if(shape.type=="circle"){
+                let dist=Math.sqrt((shape.x-startx)**2+(shape.y-starty)**2);
+                if(dist<=shape.radius){
+                    selectedobj=i;
+                }
+            }
+            else if(shape.type=="line"){
+                let dx = shape.x2 - shape.x1;
+                let dy = shape.y2 - shape.y1;
+                let t = ((startx-shape.x1)*dx + (starty-shape.y1)*dy) / (dx*dx + dy*dy);
+                t = Math.max(0, Math.min(1, t));
+                let closestX = shape.x1 + t*dx;let closestY = shape.y1 + t*dy;
+                let dist = Math.sqrt(
+                (startx-closestX)**2 + (starty-closestY)**2
+                );
+                if(dist <= 5){
+                selectedobj = i;
+                }
+            }
+            else if(shape.type=="heart"&&((startx>=shape.x-shape.size)&&(startx<=shape.x+shape.size)&&(starty>=shape.y-shape.size/2)&&(starty<=shape.y+shape.size))){
+                selectedobj=i;
+            }
+            else if(shape.type=="triangle"&&((startx>=Math.min(shape.x1,shape.x2)&&startx<=Math.max(shape.x1,shape.x2)&&starty>=Math.min(shape.y1,shape.y2)&&starty<=Math.max(shape.y1,shape.y2)))){
+                selectedobj=i;
+            }
+            redraw();
+    }
+    }
         isdrawing=false;
     }
  });
+ function redraw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.lineWidth=2;
+    for(let i=0;i<shapes.length;i++){
+        let shape=shapes[i];
+        if(i==selectedobj){
+            ctx.strokeStyle="blue";
+        }
+        else{
+            ctx.strokeStyle="black";
+        }
+        if(shape.type=="rectangle"){
+            ctx.strokeRect(shape.x,shape.y,shape.width,shape.height);
+        }
+        else if(shape.type=="circle"){
+            ctx.beginPath();
+            ctx.arc(shape.x,shape.y,shape.radius,0,2*Math.PI);
+            ctx.stroke();
+        }
+        else if(shape.type=="heart"){
+            ctx.beginPath();
+            ctx.moveTo(shape.x,shape.y-shape.size/4);
+            ctx.bezierCurveTo(shape.x-0.5*(shape.size),shape.y-0.5*(shape.size),shape.x-shape.size,shape.y+0.25*(shape.size),shape.x,shape.y+shape.size);
+            ctx.bezierCurveTo(shape.x+shape.size,shape.y+0.25*(shape.size),shape.x+0.5*(shape.size),shape.y-0.5*(shape.size),shape.x,shape.y-shape.size/4);
+           ctx.stroke();
+        }
+        else if(shape.type=="triangle"){
+            ctx.beginPath();
+            ctx.moveTo(shape.x1,shape.y1);
+            ctx.lineTo(shape.x2,shape.y1);
+            ctx.lineTo(shape.x1+(shape.x2-shape.x1)/2,shape.y2);
+            ctx.closePath();
+            ctx.stroke();
+        }
+        else if(shape.type=="line"){
+            ctx.beginPath();
+            ctx.moveTo(shape.x1,shape.y1);
+            ctx.lineTo(shape.x2,shape.y2);
+            ctx.stroke();
+        }
+    }
+ };
+   
