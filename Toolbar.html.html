@@ -6,9 +6,9 @@
         <link rel="stylesheet" href="Toolbar.css.css" />
 </head>
     <body>
-<div id="main">
+<div id="Toolbar">
     <div id="tools">
-        <div id="pencil">
+        <div id="line-btn">
             <button> <span class="material-symbols-outlined">draw</span>
             </button> 
         </div>
@@ -16,27 +16,26 @@
             <button><span class="material-symbols-outlined">brush</span> </button>
         </div>
         <div>
-            <button> <span class="material-symbols-outlined">ink_eraser</span></button>
+            <button id="erase-btn"> <span class="material-symbols-outlined">ink_eraser</span></button>
         </div>
-        <div id="line">
+        <div>
             <button > <span class="material-symbols-outlined">edit</span> 
             </button>
         </div>
-        <!-- <div id="arrdown"> 
-            <button id="shapes-btn"> <span class="material-symbols-outlined">keyboard_arrow_down</span>
-            </button>
-            
-        </div> -->
+        <div><button id="select-btn"><span class="material-symbols-outlined">select</span></button>
+        </div>
         <span > Tools </span>
     </div>
     <div id="shapes">
         <div> <button id="rect-btn"> <span class="material-symbols-outlined">rectangle</span></button>
         </div>
-        <div> <button> <span class="material-symbols-outlined">change_history</span> </button>
+        <div> <button id="circle-btn"> <span class="material-symbols-outlined">circle</span> </button>
         </div>
-        <div> <button> <span class="material-symbols-outlined">circle</span> </button>
+         <div> <button id="heart-btn"> <span class="material-symbols-outlined">favorite</span></button>
         </div>
-        <div> <button> <span class="material-symbols-outlined">square</span></button>
+        <div> <button id="tri-btn"> <span class="material-symbols-outlined">change_history</span> </button>
+        </div>
+        <div> <button id=> <span class="material-symbols-outlined">square</span></button>
         </div>
         <div> <button><span class="material-symbols-outlined">hexagon</span></button>
         </div>
@@ -46,8 +45,6 @@
         </div>
         <div> <button><span class="material-symbols-outlined">arrow_forward</span></button>
         </div>
-        <div> <button> <span class="material-symbols-outlined">arrow_downward</span></button>
-        </div>
         <div> <button><span class="material-symbols-outlined">arrow_back</span></button> 
         </div>
         <div> <button><span class="material-symbols-outlined">arrow_upward</span></button>
@@ -56,8 +53,15 @@
         </div>
         <span> Shapes </span>
     </div>
+     <div>
+            <label for="h-range">Shape Size:</label>
+            <input type="range" id="h-range" min="30" max="200" value="100">
+     </div>
 </div>
-    <div id="canvas-container"> <canvas id="page"></canvas> </div>
+    <div id="canvas-container"> 
+        <canvas id="main"></canvas>
+        <canvas id="preview"></canvas>
+    </div>
  <script src="Toolbar.js"></script>
 </body>
 </html>
