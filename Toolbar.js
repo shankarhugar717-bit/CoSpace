@@ -15,6 +15,9 @@ btnheart=document.getElementById("heart-btn");
 btnrange=document.getElementById("h-range");
 btntri=document.getElementById("tri-btn");
 btnselect=document.getElementById("select-btn");
+btnsquare=document.getElementById("square-btn");
+btnpencil=document.getElementById("pencil-btn");
+btnclear=document.getElementById("clear-btn");
 let shapes=[];
 let selectedobj=-1;
 btnrange.addEventListener("input",function(){
@@ -35,12 +38,28 @@ btnrange.addEventListener("input",function(){
             redraw();
         }
         else if(shape.type=="triangle"){
-            let width=shape.x2-shape.x1;
-            let  height=shape.y2-shape.y1;
-            shape.x2=shape.x1+width+Number(btnrange.value);
-            shape.y2=shape.y1+width+Number(btnrange.value);
+            ratio=Number(btnrange.value)/100
+            let width=shape.originalWidth;
+            let height=shape.originalHeight;
+            let newwidth=Math.abs(width)*ratio;
+            let newheight=Math.abs(height)*ratio;
+            shape.x2=shape.x1+(width<0?-newwidth:newwidth);
+            shape.y2=shape.y1+(height<0?-newheight:newheight);
+            redraw()
+        }
+        else if(shape.type=="square"){
+            let ratio=btnrange.value/shape.side;
+            shape.side=shape.side*ratio;
             redraw();
         }
+    }
+});
+btnsquare.addEventListener("click",function(){
+    if(selectedshape=="square"){
+        selectedshape="";
+    }
+    else {
+        selectedshape="square";
     }
 });
 btncircle.addEventListener("click",function(){
@@ -91,6 +110,14 @@ btntri.addEventListener("click",function(){
         selectedshape="triangle";
     }
 });
+btnpencil.addEventListener("click",function(){
+    if(selectedshape=="pencil"){
+        selectedshape="";
+    }
+    else{
+        selectedshape="pencil";
+    }
+})
 btnselect.addEventListener("click",function(){
     if(selectedshape=="select"){
         selectedshape="";
@@ -99,15 +126,29 @@ btnselect.addEventListener("click",function(){
         selectedshape="select";
     }
 });
+btnclear.addEventListener("click",function(){
+        shapes=[];
+        selectedobj=-1;
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+})
 let isdrawing=false;
 let startx,starty;
 
 canvas.addEventListener('mousedown',function(event){
-    if(selectedshape=="rectangle" || selectedshape=="circle"||selectedshape=="line"||selectedshape=="erase"||selectedshape=="triangle"||selectedshape=="select"){
+    if(selectedshape=="rectangle" || selectedshape=="circle"||selectedshape=="line"||selectedshape=="erase"||selectedshape=="triangle"||selectedshape=="select"||selectedshape=="square"||selectedshape=="pencil"){
         let rect=canvas.getBoundingClientRect();
         startx=(event.clientX-rect.left)*(canvas.width/rect.width);
         starty=(event.clientY-rect.top)*(canvas.height/rect.height);
         isdrawing=true;
+    }
+    if(selectedshape=="pencil"){
+        shapes.push({
+            type:"pencil",
+            points:[{
+                x:startx,
+                y:starty,
+            }],
+        });
     }
 });
 canvas.addEventListener("click",function(event){
@@ -137,7 +178,7 @@ canvas.addEventListener('mousemove',function(event){
     rect=canvas.getBoundingClientRect();
     currx=(event.clientX-rect.left)*(canvas.width/rect.width);
     curry=(event.clientY-rect.top)*(canvas.height/rect.height);
-   if(selectedshape=="rectangle"){
+    if(selectedshape=="rectangle"){
     width=currx-startx;
     height=curry-starty;
     ctx2.strokeStyle = "black";
@@ -174,6 +215,23 @@ canvas.addEventListener('mousemove',function(event){
         ctx2.lineTo(startx+(currx-startx)/2,curry);
         ctx2.closePath();
         ctx2.stroke();
+    }
+    else if(selectedshape=="square"){
+        ctx2.clearRect(0,0,canvas2.width,canvas2.height);
+        ctx2.beginPath();
+        let side=currx-startx;
+        ctx2.strokeRect(startx,starty,side,side);
+    }
+    else if(selectedshape=="pencil"){
+        shapes[shapes.length-1].points.push({
+            x:currx,
+            y:curry,
+        });
+        let points=shapes[shapes.length-1].points;
+        ctx.beginPath();
+        ctx.moveTo(points[points.length-2].x,points[points.length-2].y);
+        ctx.lineTo(currx,curry);
+        ctx.stroke();
     }
 }
 });
@@ -235,6 +293,8 @@ canvas.addEventListener('mouseup',function(event){
         ctx.lineTo(currx,curry);
         ctx.stroke();
         }
+
+        
         else if(selectedshape=="triangle"){
             ctx2.clearRect(0,0,canvas2.width,canvas2.height);
             ctx.beginPath();
@@ -244,6 +304,8 @@ canvas.addEventListener('mouseup',function(event){
             y1:starty,
             x2:currx,
             y2:curry,
+            originalWidth:currx-startx,
+            originalHeight:curry-starty,
             });
             ctx.moveTo(startx,starty);
             ctx.lineTo(currx,starty);
@@ -251,11 +313,27 @@ canvas.addEventListener('mouseup',function(event){
             ctx.closePath();
             ctx.stroke();
         }
+        else if(selectedshape=="square"){
+        ctx2.clearRect(0,0,canvas2.width,canvas2.height);
+        let side=currx-startx;
+        ctx.strokeRect(startx,starty,side,side);
+        shapes.push({
+            type:"square",
+            startx:startx,
+            starty:starty,
+            side:side,
+        });
+    }
         else if(selectedshape=="select"){
             selectedobj=-1;
         for(let i=0;i<shapes.length;i++){
             let shape=shapes[i];
-            if(shape.type=="rectangle"){
+            if(shape.type=="square"){
+                if( startx >= Math.min(shape.startx,shape.startx+shape.side)&&startx <= Math.max(shape.startx,shape.startx+shape.side)&&starty >= Math.min(shape.starty,shape.starty+shape.side)&&starty <= Math.max(shape.starty,shape.starty+shape.side)){
+                    selectedobj=i;
+                }
+            }
+            else if(shape.type=="rectangle"){
                 if(startx>=Math.min(shape.x,shape.x+shape.width)&&startx<=Math.max(shape.x,shape.x+shape.width)&&starty>=Math.min(shape.y,shape.y+shape.height)&&starty<=Math.max(shape.y,shape.y+shape.height)){
                 selectedobj=i;
                 }
@@ -329,6 +407,18 @@ canvas.addEventListener('mouseup',function(event){
             ctx.beginPath();
             ctx.moveTo(shape.x1,shape.y1);
             ctx.lineTo(shape.x2,shape.y2);
+            ctx.stroke();
+        }
+        else if(shape.type=="square"){
+            ctx.strokeRect(shape.startx,shape.starty,shape.side,shape.side);
+        }
+        else if(shape.type=="pencil"){
+            let points=shape.points;
+            ctx.beginPath();
+            ctx.moveTo(points[0].x,points[0].y);
+            for(let i=1;i<points.length;i++){
+                ctx.lineTo(points[i].x,points[i].y);   
+            }
             ctx.stroke();
         }
     }
