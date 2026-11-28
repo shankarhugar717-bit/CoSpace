@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Canvas</title>
+    <title>WhiteBoard</title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
         <link rel="stylesheet" href="Toolbar.css.css" />
 </head>
@@ -9,52 +9,57 @@
 <div id="Toolbar">
     <div id="tools">
         <div id="line-btn">
-            <button> <span class="material-symbols-outlined">draw</span>
+            <button class="btns"> <span class="material-symbols-outlined">draw</span>
             </button> 
         </div>
         <div > 
-            <button><span class="material-symbols-outlined">brush</span> </button>
+            <button class="btns"><span class="material-symbols-outlined">brush</span> </button>
         </div>
         <div>
-            <button id="erase-btn"> <span class="material-symbols-outlined">ink_eraser</span></button>
+            <button id="erase-btn" class="btns"> <span class="material-symbols-outlined">ink_eraser</span></button>
         </div>
         <div>
-            <button > <span class="material-symbols-outlined">edit</span> 
+            <button id="pencil-btn" class="btns"> <span class="material-symbols-outlined">edit</span> 
             </button>
         </div>
-        <div><button id="select-btn"><span class="material-symbols-outlined">select</span></button>
+        <div><button id="select-btn" class="btns"><span class="material-symbols-outlined">select</span></button>
         </div>
         <span > Tools </span>
     </div>
     <div id="shapes">
-        <div> <button id="rect-btn"> <span class="material-symbols-outlined">rectangle</span></button>
+        <div> <button id="rect-btn" class="btns"> <span class="material-symbols-outlined">rectangle</span></button>
         </div>
-        <div> <button id="circle-btn"> <span class="material-symbols-outlined">circle</span> </button>
+        <div> <button id="circle-btn" class="btns"> <span class="material-symbols-outlined">circle</span> </button>
         </div>
-         <div> <button id="heart-btn"> <span class="material-symbols-outlined">favorite</span></button>
+         <div> <button id="heart-btn" class="btns"> <span class="material-symbols-outlined">favorite</span></button>
         </div>
-        <div> <button id="tri-btn"> <span class="material-symbols-outlined">change_history</span> </button>
+        <div> <button id="tri-btn" class="btns"> <span class="material-symbols-outlined">change_history</span> </button>
         </div>
-        <div> <button id=> <span class="material-symbols-outlined">square</span></button>
+        <div> <button id="square-btn" class="btns"> <span class="material-symbols-outlined">square</span></button>
         </div>
-        <div> <button><span class="material-symbols-outlined">hexagon</span></button>
+        <div> <button class="btns"><span class="material-symbols-outlined">hexagon</span></button>
         </div>
-        <div> <button><span class="material-symbols-outlined">pentagon</span></button>
+        <div> <button class="btns"><span class="material-symbols-outlined">pentagon</span></button>
         </div>
-        <div> <button><span class="material-symbols-outlined">star</span></button>
+        <div> <button class="btns"><span class="material-symbols-outlined">star</span></button>
         </div>
-        <div> <button><span class="material-symbols-outlined">arrow_forward</span></button>
+        <div> <button class="btns"><span class="material-symbols-outlined">arrow_forward</span></button>
         </div>
-        <div> <button><span class="material-symbols-outlined">arrow_back</span></button> 
+        <div> <button class="btns"><span class="material-symbols-outlined">arrow_back</span></button> 
         </div>
-        <div> <button><span class="material-symbols-outlined">arrow_upward</span></button>
+        <div> <button class="btns"><span class="material-symbols-outlined">arrow_upward</span></button>
         </div>
-        <div><button><span class="material-symbols-outlined">diamond</span></button>
+        <div><button class="btns"><span class="material-symbols-outlined">diamond</span></button>
         </div>
         <span> Shapes </span>
     </div>
-     <div>
-            <label for="h-range">Shape Size:</label>
+    <div>
+        <button id="clear-btn" class="btns"><span class="material-symbols-outlined"> clear_all </span></button>
+        <button class="btns"><span class="material-symbols-outlined">undo</span></button>
+        <button class="btns"><span class="material-symbols-outlined">redo</span></button>
+    </div>
+     <div id="slider">
+            <label for="h-range">Shape Size</label>
             <input type="range" id="h-range" min="30" max="200" value="100">
      </div>
 </div>
